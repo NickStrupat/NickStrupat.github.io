@@ -2,21 +2,18 @@
 @import 'mixins';
 
 /*
-	Strata by HTML5 UP
+	Alpha by HTML5 UP
 	html5up.net | @n33co
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
-/* Button */
+/* Basic */
 
-	input[type="submit"],
-	input[type="reset"],
-	input[type="button"],
-	.button {
+	pre, code {
 		position: relative;
 		-ms-behavior: url('css/ie/PIE.htc');
 	}
-
+	
 /* Form */
 
 	input[type="text"],
@@ -26,22 +23,55 @@
 	textarea {
 		position: relative;
 		-ms-behavior: url('css/ie/PIE.htc');
-	}
-
-	input[type="text"],
-	input[type="password"],
-	input[type="email"],
-	select {
-		height: $size-element-height;
-		line-height: $size-element-height;
+		line-height: 3em;
 	}
 
 	input[type="checkbox"],
-	input[type="radio"] {
+	input[type="radio"], {
+		opacity: 1;
+		z-index: auto;
+		
 		& + label {
 			&:before {
 				display: none;
 			}
+		}
+	}
+	
+/* Button */
+
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	.button {
+		position: relative;
+		-ms-behavior: url('css/ie/PIE.htc');
+		
+		&.alt {
+			border: solid 2px $color-border;
+		}
+	}
+	
+/* Box */
+
+	.box {
+		position: relative;
+		-ms-behavior: url('css/ie/PIE.htc');
+
+		.image {
+			&.featured {
+				margin: 2em 0;
+				width: 100%;
+			}
+		}
+	}
+
+/* Icon */
+
+	.icon {
+		&.major {
+			position: relative;
+			-ms-behavior: url('css/ie/PIE.htc');
 		}
 	}
 
@@ -50,11 +80,7 @@
 	.image {
 		position: relative;
 		-ms-behavior: url('css/ie/PIE.htc');
-
-		&:before, &:after {
-			display: none !important;
-		}
-
+		
 		img {
 			position: relative;
 			-ms-behavior: url('css/ie/PIE.htc');
@@ -64,22 +90,101 @@
 /* Header */
 
 	#header {
-		background-image: url('../../images/bg.jpg');
-		background-repeat: no-repeat;
-		background-size: cover;
-		-ms-behavior: url('css/ie/backgroundsize.min.htc');
-		
-		h1 {
-			color: $color-accent2-fg-bold;
+		nav {
+			> ul {
+				> li {
+					a {
+						color: #fff;
+						display: inline-block;
+						text-decoration: none;
+						border: 0;
+						
+						&.icon {
+							&:before {
+								color: #fff;
+								margin-right: 0.5em;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		&.alt {
+			color: #fff;
+			
+			nav {
+				> ul {
+					> li {
+						a:not(.button) {
+							&.icon {
+								&:before {
+									color: rgba(255,255,255,0.75);
+								}
+							}
+						}
+
+						&.active {
+							a:not(.button) {
+								background-color: rgba(255,255,255,0.2);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	
-/* Footer */
-
-	#footer {
-		.icons {
-			a {
-				color: $color-accent2-fg-bold;
+	.dropotron {
+		border: solid 1px $color-border;
+		
+		&.level-0 {
+			margin-top: 0;
+			
+			&:before {
+				display: none;
 			}
+		}
+	}
+
+/* Banner */
+
+	#banner {
+		background-attachment:	scroll;
+		background-image:		url('../../images/banner.jpg');
+		background-position:	auto;
+		background-repeat:		no-repeat;
+		background-size:		cover;
+		-ms-behavior: url('css/ie/backgroundsize.min.htc');
+		
+		input[type="submit"],
+		input[type="reset"],
+		input[type="button"],
+		.button {
+			border: solid 2px #fff;
+		}
+	}
+	
+/* Main */
+
+	#main {
+		position: relative;
+		z-index: 1;
+	}
+
+/* CTA */
+	
+	#cta {
+		input[type="text"],
+		input[type="password"],
+		input[type="email"],
+		select,
+		textarea {
+			background: $color-accent2-bg;
+			border: solid 2px #fff;
+		}
+
+		.formerize-placeholder {  
+			color: #fff !important;
 		}
 	}
