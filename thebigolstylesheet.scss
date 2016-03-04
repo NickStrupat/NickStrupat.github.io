@@ -147,6 +147,7 @@ article.title {
     background-color: darkred;
     
     &> div.article-body {
+        text-align: center;
         border-color: yellow;
     }
 }
@@ -156,6 +157,8 @@ article > h1 {
     top: 0;
     padding: 2px 0.5em 0 0.5em;
     background: inherit;
+    color: blue;
+    background-color: white;
 }
 /*div.dos-box-outer > h1:before {
 }
