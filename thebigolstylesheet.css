@@ -1,0 +1,187 @@
+html {
+  /*background: black;
+    background: url(data:image/gif;base64,R0lGODlhAwADAIAAAKWlpQAAACwAAAAAAwADAAACBEwAdlEAOw==);*/
+  /*background: url('data:image/gif;base64,R0lGODlhCQACAIAAAKioqAAAACwAAAAACQACAAACBoxhgZobBQA7');*/
+  background: #333;
+  font-family: 'IBMVGA8', 'PxPlus IBM VGA8';
+  font-size: 16px;
+  /*text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);*/
+  -webkit-text-size-adjust: none;
+  image-rendering: optimizeSpeed;
+  /* STOP SMOOTHING, GIVE ME SPEED  */
+  image-rendering: -moz-crisp-edges;
+  /* Firefox                        */
+  image-rendering: -o-crisp-edges;
+  /* Opera                          */
+  image-rendering: -webkit-optimize-contrast;
+  /* Chrome (and eventually Safari) */
+  image-rendering: pixelated;
+  /* Chrome */
+  image-rendering: optimize-contrast;
+  /* CSS3 Proposed                  */
+  -ms-interpolation-mode: nearest-neighbor;
+  /* IE8+                           */ }
+
+/*#background {
+    position: fixed;
+    width: 100%;
+    z-index: -1;
+    height: 9999px;
+    background: url('data:image/gif;base64,R0lGODlhCQACAIAAAKioqAAAACwAAAAACQACAAACBoxhgZobBQA7');
+    background: #333;                
+}*/
+/*@media only screen and (min-resolution: 144dpi) {
+    #background {
+        -moz-transform: scale(1.3333,1.3333);
+        -webkit-transform: scale(1.3333,1.3333);
+        transform: scale(1.3333,1.3333);
+    }
+}*/
+body {
+  margin: 0; }
+
+header {
+  box-sizing: border-box;
+  width: 100%;
+  background: grey;
+  padding: 0 1em;
+  color: black; }
+
+header > ul {
+  padding: 0 1em; }
+
+#title {
+  float: left;
+  width: 100%; }
+
+@media (max-width: 360px) {
+  #time {
+    display: none; }
+  header > ul {
+    padding: 0; } }
+
+@media (max-width: 470px) {
+  #search {
+    width: 4em; }
+  #search:focus {
+    width: initial; }
+  header {
+    text-align: center; } }
+
+@media (max-width: 775px) {
+  #title {
+    width: auto; } }
+
+header > ul,
+header > ul > li {
+  margin-left: 0;
+  display: inline-block;
+  color: black; }
+
+header > ul > li::first-letter {
+  color: darkred; }
+
+a {
+  padding: 0 0.5em;
+  text-decoration: none;
+  color: inherit; }
+
+button.email:hover,
+a:hover {
+  background: black;
+  color: grey; }
+
+#time {
+  padding-top: 1px; }
+
+#info {
+  position: absolute;
+  top: 0;
+  right: 0; }
+
+#search {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: 'IBMVGA8';
+  font-size: 16px;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  margin-right: 1em;
+  padding: 0 0.5em;
+  background: black;
+  color: white; }
+
+#search:focus {
+  outline: none; }
+
+#search,
+#time,
+#page-length {
+  float: right; }
+
+section {
+  margin: 2em auto;
+  padding: 1em;
+  max-width: 800px;
+  color: white; }
+
+/*li {
+    margin: 0;
+    list-style-type: none;
+    width: 80em;
+    overflow-x: hidden;
+}
+li:before {
+    color: #0aa;
+    content: "\BB\A0";
+}
+li:after {
+    color: #a00;
+    content: ' ]-----------------------------------------------------------------------------------------------';
+}*/
+div.dos-box-outer {
+  position: relative;
+  background: blue;
+  padding: 0.5em 1px;
+  box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5); }
+
+div.dos-box-outer > h1 {
+  position: absolute;
+  left: 1em;
+  top: 0;
+  padding: 2px 0.5em 0 0.5em;
+  background: inherit; }
+
+/*div.dos-box-outer > h1:before {
+}
+div.dos-box-outer > h1:after {
+}*/
+div.dos-box {
+  background: blue;
+  border: 3px darkgrey double;
+  padding: 0.5em; }
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  background: teal; }
+
+footer > * {
+  padding: 1px 0; }
+
+button.email {
+  display: none;
+  border: 0;
+  font-family: inherit;
+  font-size: inherit;
+  background: inherit; }
+
+button.email:hover {
+  cursor: pointer; }
+
+#page-length:before {
+  content: "Page length: "; }

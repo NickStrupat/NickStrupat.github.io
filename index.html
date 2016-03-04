@@ -1,181 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-        <style>
-            @font-face {
-                font-family: 'IBMVGA8';
-                src: url(font/ibm_vga8.eot);
-                src: url(font/ibm_vga8.eot?#iefix) format('embedded-opentype'),
-                     url(font/ibm_vga8.woff2) format('woff2'),
-                     url(font/ibm_vga8.woff) format('woff'),
-                     url(font/ibm_vga8.ttf) format('truetype');
-                font-weight: normal;
-                font-style: normal;
-            }
-            html {
-                /*background: black;
-                background: url(data:image/gif;base64,R0lGODlhAwADAIAAAKWlpQAAACwAAAAAAwADAAACBEwAdlEAOw==);*/
-                
-                /*background: url('data:image/gif;base64,R0lGODlhCQACAIAAAKioqAAAACwAAAAACQACAAACBoxhgZobBQA7');*/
-                
-                font-family: 'IBMVGA8', 'PxPlus IBM VGA8';
-                font-size: 16px;
-                /*text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);*/
-                
-                -webkit-text-size-adjust: none;
-                
-                image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
-                image-rendering: -moz-crisp-edges;          /* Firefox                        */
-                image-rendering: -o-crisp-edges;            /* Opera                          */
-                image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
-                image-rendering: pixelated; /* Chrome */
-                image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
-                -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
-            }
-            #background {
-                position: fixed;
-                width: 100%;
-                z-index: -1;
-                height: 9999px;
-                background: url('data:image/gif;base64,R0lGODlhCQACAIAAAKioqAAAACwAAAAACQACAAACBoxhgZobBQA7');
-                background: #333;                
-            }
-            @media only screen and (min-resolution: 144dpi) {
-                #background {
-                    -moz-transform: scale(1.3333,1.3333);
-                    -webkit-transform: scale(1.3333,1.3333);
-                    transform: scale(1.3333,1.3333);
-                }
-            }
-            body {
-                margin: 0;
-            }
-            header {
-                box-sizing: border-box;
-                width: 100%;
-                background: grey;
-                padding: 0 1em;
-                color: black;
-            }
-            header > ul,
-            header > ul > li {
-                margin-left: 1em;
-                display: inline-block;
-                color: black;
-            }
-            header > ul > li::first-letter {
-                color: darkred;
-            }
-            header > ul > li > a {
-                padding: 0 0.5em;
-                text-decoration: none;
-                color: inherit;
-            }
-            header > ul > li > a:hover {
-                background: black;
-                color: grey;
-            }
-            header > ul > li,
-            #time {
-                padding-top: 1px;
-            }
-            #search {
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-  
-                font-family: 'IBMVGA8';
-                font-size: 16px;
-                border: none;
-                margin: 0;
-                margin-right: 1em;
-                padding: 1px 0.5em;
-                background: black;
-                color: white;
-            }
-            #search:focus {
-                outline: none;
-            }
-            
-            .right,
-            #search,
-            #time,
-            #page-length {
-                float: right;
-            }
-            
-            section {
-                margin: 2em auto;
-                padding: 1em;
-                max-width: 800px;
-                color: white;
-            }
-            /*li {
-                margin: 0;
-                list-style-type: none;
-                width: 80em;
-                overflow-x: hidden;
-            }
-            li:before {
-                color: #0aa;
-                content: "\BB\A0";
-            }
-            li:after {
-                color: #a00;
-                content: ' ]-----------------------------------------------------------------------------------------------';
-            }*/
-
-            div.dos-box-outer {
-                position: relative;
-                background: blue;
-                padding: 0.5em 1px;
-                box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5);
-            }
-            div.dos-box-outer > h1 {
-                position: absolute;
-                left: 1em;
-                top: 0;
-                padding: 2px 0.5em 0 0.5em;
-                background: inherit;
-            }
-            /*div.dos-box-outer > h1:before {
-            }
-            div.dos-box-outer > h1:after {
-            }*/
-            div.dos-box {
-                background: blue;
-                border: 3px darkgrey double;
-                padding: 0.5em;
-            }
-            
-            footer {
-                position: fixed;
-                left: 0;
-                bottom: -1px;
-                width: 100%;
-                background: teal;
-            }
-            footer > * {
-                padding-top: 1px;
-            }
-            #page-length:before {
-                content: "Length ";
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="font/ibmvga8.css">
+        <link rel="stylesheet" type="text/css" href="thebigolstylesheet.css">
     </head>
     <body onload="init()">
-        <div id="background"></div>
+        <!--<div id="background"></div>-->
         <header>
-            NS-DOS Version <span id="date"></span>
+            <span id="title">NS-DOS Version <span id="date"></span></span>
             <ul>
                 <li><a href="">Home</a></li>
                 <li><a href="">Archive</a></li>
                 <li><a href="">GitHub</a></li>
                 <li><a href="">LinkedIn</a></li>
             </ul>
-            <span id="time"></span>
-            <input id="search" type="text" placeholder="Search"/>
+            <span id="info">
+                <span id="time"></span>
+                <input id="search" type="text" placeholder="Search"/>
+            </span>
         </header>
         <!--Test
         <ul>
@@ -192,8 +36,8 @@
             </div>
         </section>
         <footer>
-            <a href="">Previous</a>
-            <a href="">Next</a>
+            <a class="email" href="mailto:nick.strupat@gmail.com">nick.strupat@gmail.com</a>
+            <button class="email">nick.strupat@gmail.com</button>
             <span id="page-length"></span>
         </footer>
     </body>
@@ -211,6 +55,28 @@
             var date = new Date();
             document.getElementById('date').innerHTML = date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate()
             document.getElementById('page-length').innerHTML = document.documentElement.innerHTML.length;
+            
+            // var emailElements = document.getElementsByClassName('email');
+            var emailAnchor = document.querySelector('a.email');
+            var buttonAnchor = document.querySelector('button.email');
+            if (document.queryCommandSupported("copy") === true) {
+                var $parent = emailAnchor.parentElement;
+                $parent.removeChild(emailAnchor);
+                buttonAnchor.style.display = 'inline-block';
+                buttonAnchor.addEventListener('click', function(event) {
+                    copyEmailToClipboard(emailAnchor.innerHTML);
+                });
+            }
+        }
+        function copyEmailToClipboard(text) {
+            var $textArea = document.createElement('textarea');
+            $textArea.value = text;
+            document.body.appendChild($textArea);
+            $textArea.select();
+            var success = document.execCommand('copy');
+            document.body.removeChild($textArea);
+            if (success !== true)
+                alert('Could not copy email to clipboard. Try selecting the text and copying like the old days.')
         }
     </script>
 </html>
