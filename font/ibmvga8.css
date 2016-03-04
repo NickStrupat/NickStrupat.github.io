@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'IBMVGA8';
-    src: url(font/ibm_vga8.eot);
-    src: url(font/ibm_vga8.eot?#iefix) format('embedded-opentype'),
-         url(font/ibm_vga8.woff2) format('woff2'),
-         url(font/ibm_vga8.woff) format('woff'),
-         url(font/ibm_vga8.ttf) format('truetype');
+    src: url(ibm_vga8.eot);
+    src: url(ibm_vga8.eot?#iefix) format('embedded-opentype'),
+         url(ibm_vga8.woff2) format('woff2'),
+         url(ibm_vga8.woff) format('woff'),
+         url(ibm_vga8.ttf) format('truetype');
     font-weight: normal;
     font-style: normal;
 }

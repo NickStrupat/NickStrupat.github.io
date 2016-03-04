@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "build": "npm run scss && npm run ts",
+        "ts": "tsc thescriptfile.ts",
+        "scss": "node-sass thebigolstylesheet.scss thebigolstylesheet.css"
+    }
+}

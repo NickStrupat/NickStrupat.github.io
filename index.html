@@ -7,10 +7,9 @@
         <link rel="stylesheet" type="text/css" href="thebigolstylesheet.css">
     </head>
     <body onload="init()">
-        <!--<div id="background"></div>-->
         <header>
             <span id="title">NS-DOS Version <span id="date"></span></span>
-            <ul>
+            <ul id="navigation">
                 <li><a href="">Home</a></li>
                 <li><a href="">Archive</a></li>
                 <li><a href="">GitHub</a></li>
@@ -21,62 +20,31 @@
                 <input id="search" type="text" placeholder="Search"/>
             </span>
         </header>
-        <!--Test
-        <ul>
-            <li>What</li>
-            <li>The</li>
-            <li>What</li>
-        </ul>-->
+        
 		<section>
-            <div class="dos-box-outer">
-                <h1>test</h2>
-                <div class="dos-box">
-                    test
+            <article class="title">
+                <div class="article-body">
+                    <p>Attack of the Code</p>
                 </div>
-            </div>
+            </article>
         </section>
+        
+		<section>
+            <article>
+                <h1>EntityFramework triggers</h1>
+                <div class="article-body">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales euismod ipsum, quis commodo nisi euismod et. Maecenas dictum tempus vestibulum. Duis pulvinar felis non dui laoreet pulvinar. Morbi sit amet purus ut justo mattis hendrerit. Mauris sit amet nibh faucibus urna commodo tempus at dapibus velit. Donec efficitur eros velit, sit amet aliquam ante rhoncus at. Quisque et eros nibh. Cras eget porta nibh, non tincidunt arcu. Vestibulum congue, eros eu ornare sollicitudin, augue ligula aliquet sapien, at tempus velit leo id velit. Morbi ut mi ut risus mattis sagittis. Etiam auctor massa quis mauris blandit dignissim. Vivamus euismod egestas augue, at rutrum nunc vestibulum nec.
+                    </p>
+                </div>
+            </article>
+        </section>
+        
         <footer>
             <a class="email" href="mailto:nick.strupat@gmail.com">nick.strupat@gmail.com</a>
             <button class="email">nick.strupat@gmail.com</button>
             <span id="page-length"></span>
         </footer>
     </body>
-    <script>
-        function updateTime() {
-            var date = new Date();
-            document.getElementById('time').innerHTML = addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
-            setTimeout(updateTime, 1000);
-        }
-        
-        function addZero(i) { return i < 10 ? "0" + i : i; }
-        
-        function init() {
-            updateTime();
-            var date = new Date();
-            document.getElementById('date').innerHTML = date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate()
-            document.getElementById('page-length').innerHTML = document.documentElement.innerHTML.length;
-            
-            // var emailElements = document.getElementsByClassName('email');
-            var emailAnchor = document.querySelector('a.email');
-            var buttonAnchor = document.querySelector('button.email');
-            if (document.queryCommandSupported("copy") === true) {
-                var $parent = emailAnchor.parentElement;
-                $parent.removeChild(emailAnchor);
-                buttonAnchor.style.display = 'inline-block';
-                buttonAnchor.addEventListener('click', function(event) {
-                    copyEmailToClipboard(emailAnchor.innerHTML);
-                });
-            }
-        }
-        function copyEmailToClipboard(text) {
-            var $textArea = document.createElement('textarea');
-            $textArea.value = text;
-            document.body.appendChild($textArea);
-            $textArea.select();
-            var success = document.execCommand('copy');
-            document.body.removeChild($textArea);
-            if (success !== true)
-                alert('Could not copy email to clipboard. Try selecting the text and copying like the old days.')
-        }
-    </script>
+    <script src="thescriptfile.js"></script>
 </html>
