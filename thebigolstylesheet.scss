@@ -2,8 +2,8 @@ html {
     /*background: black;
     background: url(data:image/gif;base64,R0lGODlhAwADAIAAAKWlpQAAACwAAAAAAwADAAACBEwAdlEAOw==);*/
     
-    /*background: url('data:image/gif;base64,R0lGODlhCQACAIAAAKioqAAAACwAAAAACQACAAACBoxhgZobBQA7');*/
     background: #333; 
+    background: url('data:image/gif;base64,R0lGODlhCQACAIAAAKioqAAAACwAAAAACQACAAACBoxhgZobBQA7');
     
     font-family: 'IBMVGA8';
     font-size: 16px;
@@ -42,24 +42,29 @@ ul#navigation {
 #title {
     width: 100%;
 }
-@media (max-width: 596px) {
+
+@media (max-width: 567px) {
     #title { float: left; }
     ul#navigation {
         width: 100%;
         padding-left: 0;
+        text-align: center;
     }
+}
+@media (max-width: 595px) {
     ul#navigation > li > a:first-child {
         padding-left: 0;
     }
 }
-@media (max-width: 670px) {
+@media (max-width: 666px) {
     #time { display: none; }
     #search:focus { width: initial; }
 }
-@media (max-width: 780px) {
+@media (max-width: 792px) {
     #search { width: 4em; }
     header > ul { padding: 0; }
 }
+
 ul#navigation,
 ul#navigation > li {
     display: inline-block;

@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", init);
 function updateTime() {
     var date = new Date();
     document.getElementById('time').innerHTML = addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
@@ -19,6 +20,14 @@ function init() {
             copyEmailToClipboard(emailAnchor.innerHTML);
         });
     }
+    var titleHeaderTextElement = document.querySelector('.title h1');
+    var text = titleHeaderTextElement.innerHTML;
+    var technicolorText = '';
+    var colors = ['tomato', 'orange', 'yellow', 'turquoise', 'springgreen', 'aqua', 'violet', 'magenta'];
+    for (var i = 0; i != text.length; ++i) {
+        technicolorText += '<span style="color:' + colors[i % colors.length] + ';">' + text[i] + '</span>';
+    }
+    titleHeaderTextElement.innerHTML = technicolorText;
 }
 function copyEmailToClipboard(text) {
     var $textArea = document.createElement('textarea');

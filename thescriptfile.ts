@@ -1,16 +1,11 @@
-
-function updateTime() {
-    var date = new Date();
-    document.getElementById('time').innerHTML = addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
-    setTimeout(updateTime, 1000);
-}
-
-function addZero(i) { return i < 10 ? "0" + i : i; }
+document.addEventListener("DOMContentLoaded", init);
 
 function init() {
-    updateTime();
+    setClock();
+    
     var date = new Date();
     document.getElementById('date').innerHTML = (date.getFullYear() - 2000) + "." + (date.getMonth() + 1) + "." + date.getDate()
+    
     document.getElementById('page-length').innerHTML = document.documentElement.innerHTML.length.toString();
     
     var emailAnchor = <HTMLElement> document.querySelector('a.email');
@@ -23,7 +18,25 @@ function init() {
             copyEmailToClipboard(emailAnchor.innerHTML);
         });
     }
+    
+    var titleHeaderTextElement = <HTMLElement> document.querySelector('.title h1');
+    var text = titleHeaderTextElement.innerHTML;
+    var technicolorText = '';
+    var colors = ['tomato','orange','yellow','turquoise','springgreen','aqua','violet','magenta'];
+    for (var i = 0; i != text.length; ++i) {
+        technicolorText += '<span style="color:' + colors[i % colors.length] + ';">' + text[i] + '</span>';
+    }
+    titleHeaderTextElement.innerHTML = technicolorText;
 }
+
+function setClock() {
+    var date = new Date();
+    document.getElementById('time').innerHTML = addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+    setTimeout(setClock, 1000);
+}
+
+function addZero(i) { return i < 10 ? "0" + i : i; }
+
 function copyEmailToClipboard(text) {
     var $textArea = document.createElement('textarea');
     $textArea.value = text;
