@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "sourceMap": true
+    },
+	"files": [
+		"showdown.d.ts",
+		"vue.d.ts",
+		"thescriptfile.ts"
+	]
+}

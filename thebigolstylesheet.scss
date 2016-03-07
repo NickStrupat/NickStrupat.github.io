@@ -28,6 +28,7 @@ html {
 }*/
 body {
     margin: 0;
+	padding-bottom: 1em;
 }
 header {
     box-sizing: border-box;
@@ -132,12 +133,17 @@ li:after {
     content: ' ]-----------------------------------------------------------------------------------------------';
 }*/
 section {
+	display: none;
     margin: 2em auto;
     max-width: 800px;
+}
+body.loaded > section {
+    display: block;
 }
 section:first-of-type {
     margin: 1em auto;
 }
+
 article {
     position: relative;
     margin: 0 1em 0 0.5em;
@@ -146,44 +152,76 @@ article {
     color: white;
     background: blue;
     box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5);
+	
+	p {
+		margin: 1em 0;
+	}
+	
+	&> header {
+		&> h1,
+		&> span {
+			position: absolute;
+			padding: 2px 0.5em 0 0.5em;
+		}
+		
+		&> h1 {
+			position: absolute;
+			left: 1em;
+			top: 0;
+			padding: 2px 0.5em 0 0.5em;
+			background: inherit;
+			color: blue;
+			background-color: white;
+		}
+		
+		&> .date-time {
+			right: 1em;
+			top: 0;
+			color: white;
+			background-color: blue;
+		}
+	}
+	
+	&> footer {
+		&> .comment-count {
+			position: absolute;
+			right: 1em;
+			bottom: 0;
+			padding: 0 0.5em;
+			color: blue;
+			background-color: white;
+		}
+	}
 }
 article.title {
     color: yellow;
     background-color: darkred;
     
-    &> div.article-body {
+    &> main {
         text-align: center;
         border-color: yellow;
     }
-}
-article > h1 {
-    position: absolute;
-    left: 1em;
-    top: 0;
-    padding: 2px 0.5em 0 0.5em;
-    background: inherit;
-    color: blue;
-    background-color: white;
 }
 /*div.dos-box-outer > h1:before {
 }
 div.dos-box-outer > h1:after {
 }*/
-div.article-body {
+article > main {
     border: 3px white double;
     padding: 0.5em;
 }
 
-footer {
+body > footer {
     position: fixed;
     left: 0;
     bottom: -1px;
     width: 100%;
     background: teal;
+	&> * {
+		padding: 1px 0;
+	}
 }
-footer > * {
-    padding: 1px 0;
-}
+
 button.email {
     display: none;
     border: 0;
