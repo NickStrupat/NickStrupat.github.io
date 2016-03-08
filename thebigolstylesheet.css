@@ -147,6 +147,13 @@ article {
   box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5); }
   article p {
     margin: 1em 0; }
+  article a {
+    padding: 0; }
+    article a:hover {
+      background: inherit;
+      color: inherit; }
+  article .mention {
+    text-decoration: underline; }
   article > header > h1,
   article > header > span {
     position: absolute;
@@ -220,3 +227,5 @@ button.email:hover {
 
 #page-length:before {
   content: "Page size: "; }
+
+/*# sourceMappingURL=thebigolstylesheet.css.map */

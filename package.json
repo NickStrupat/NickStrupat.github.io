@@ -2,6 +2,6 @@
     "scripts": {
         "build": "npm run scss && npm run ts",
         "ts": "start \"TypeScript Watch\" /min tsc -p . -w",
-        "scss": "start \"Node-Sass Watch\" /min node-sass thebigolstylesheet.scss thebigolstylesheet.css -w"
+        "scss": "start \"Node-Sass Watch\" /min node-sass thebigolstylesheet.scss thebigolstylesheet.css -w --source-map true"
     }
 }

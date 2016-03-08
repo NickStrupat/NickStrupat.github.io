@@ -54,7 +54,8 @@ function gimmeThatRainbowFam() {
     titleHeaderTextElement.innerHTML = technicolorHtml;
 }
 var vm = new Vue({ el: 'body' });
-function handleIssuesData(responseData) {
+function handleIssuesData(responseData, details) {
+    if (details === void 0) { details = true; }
     if (responseData.length != 0 && responseData[0]['url'] != undefined) {
         var converter = new showdown.Converter();
         for (var i in responseData) {
@@ -77,11 +78,14 @@ function handleIssuesData(responseData) {
     }
     document.body.setAttribute('data-loaded', 'true');
 }
+var pattern = /\B@[a-z0-9_-]+/mgi;
 function handleCommentsData(commentsData) {
     var converter = new showdown.Converter();
     for (var i in commentsData) {
         var comment = commentsData[i];
-        comment.bodyHtml = converter.makeHtml(comment.body);
+        var bodyHtml = converter.makeHtml(comment.body);
+        bodyHtml = bodyHtml.replace(pattern, function (x) { return ("<a class=\"mention\" href=\"https://github.com/" + x.substring(1) + "\">" + x + "</a>"); });
+        comment.bodyHtml = bodyHtml;
         var date = new Date(comment.created_at);
         var x = {
             dow: getDayOfWeek(date),
@@ -107,15 +111,16 @@ function jsonpRequest(uri, callback, callbackParam) {
     document.body.appendChild(scriptElement);
 }
 function getQueryStringParams(qs) {
-    var params = [];
+    var params = {};
     var varPairs = qs.split('&');
     if (varPairs.length == 0)
         return params;
     for (var i = 0; i < varPairs.length; i++) {
         var pair = varPairs[i].split('=');
-        if (pair.length != 2)
-            continue;
-        params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+        if (pair.length == 1 && pair[0].length != 0)
+            params[decodeURIComponent(pair[0])] = null;
+        if (pair.length == 2)
+            params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
     }
     return params;
 }
@@ -129,22 +134,21 @@ function processLocation() {
     document.body.removeAttribute('data-loaded');
     var uri;
     var handler;
-    var q = queryStringParams['q'];
-    var post = queryStringParams['post'];
-    if (q != undefined) {
-        uri = "https://api.github.com/search/issues?q=repo:" + user + "/" + repo + " label:post label:published " + q;
+    if (queryStringParams.q) {
+        uri = "https://api.github.com/search/issues?q=repo:" + user + "/" + repo + " label:post label:published " + queryStringParams.q;
         handler = function (r) { return handleIssuesData(r.data.items); };
     }
-    else if (post != undefined) {
-        uri = "https://api.github.com/repos/" + user + "/" + repo + "/issues/" + post;
+    else if (queryStringParams.post) {
+        uri = "https://api.github.com/repos/" + user + "/" + repo + "/issues/" + queryStringParams.post;
         handler = function (r) {
-            jsonpRequest(r.data.comments_url, function (cr) { return handleCommentsData(cr.data); });
+            if (r.data.comments_url != undefined)
+                jsonpRequest(r.data.comments_url, function (cr) { return handleCommentsData(cr.data); });
             handleIssuesData([r.data]);
         };
     }
     else {
         uri = "https://api.github.com/repos/" + user + "/" + repo + "/issues?labels=post,published";
-        handler = function (r) { return handleIssuesData(r.data); };
+        handler = function (r) { return handleIssuesData(r.data, !queryStringParams.archive); };
     }
     jsonpRequest(uri, handler);
 }

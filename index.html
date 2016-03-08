@@ -48,7 +48,7 @@
 		<section v-for="post in posts">
             <article>
 				<header>
-					<h1>{{ post.title }}</h1>
+					<h1><a href="#post={{ post.number }}">{{ post.title }}</a></h1>
 					<span class="date-time">{{ post.created }}</span>
 				</header>
 				
@@ -65,7 +65,7 @@
 		<section v-for="comment in comments">
             <article class="comment">
 				<header>
-					<h1>{{ comment.user.login }}</h1>
+					<h1><a href="https://github.com/{{ comment.user.login }}">{{ comment.user.login }}</a></h1>
 					<span class="date-time">{{ comment.created }}</span>
 				</header>
 				

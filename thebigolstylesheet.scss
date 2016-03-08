@@ -157,7 +157,19 @@ article {
     box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5);
 	
 	p {
-		margin: 1em 0;
+		margin: 1em 0; 
+	}
+	
+	a {
+		padding: 0;
+		&:hover {
+			background: inherit;
+			color: inherit;
+		}
+	}
+	
+	.mention {
+		text-decoration: underline;
 	}
 	
 	&> header {

@@ -55,7 +55,7 @@ function gimmeThatRainbowFam() {
 }
 
 let vm = new Vue({el: 'body'});
-function handleIssuesData(responseData : any[]) {
+function handleIssuesData(responseData : any[], details = true) {
 	if (responseData.length != 0 && responseData[0]['url'] != undefined) {
 		let converter = new showdown.Converter();
 		for (let i in responseData) {
@@ -79,11 +79,14 @@ function handleIssuesData(responseData : any[]) {
 	document.body.setAttribute('data-loaded', 'true');
 }
 
+const pattern = /\B@[a-z0-9_-]+/mgi;
 function handleCommentsData(commentsData : any[]) {
 	let converter = new showdown.Converter();
 	for (let i in commentsData) {
 		var comment = commentsData[i];
-		comment.bodyHtml = converter.makeHtml(comment.body);
+		let bodyHtml = converter.makeHtml(comment.body);
+		bodyHtml = bodyHtml.replace(pattern, x => `<a class="mention" href="https://github.com/${x.substring(1)}">${x}</a>`);
+		comment.bodyHtml = bodyHtml;
 		const date = new Date(comment.created_at);
 		const x = {
 			dow: getDayOfWeek(date),
@@ -109,16 +112,17 @@ function jsonpRequest(uri : string, callback : (response) => void, callbackParam
     document.body.appendChild(scriptElement);
 }
 
-function getQueryStringParams(qs : string) : string[] {
-	let params : string[] = [];
+function getQueryStringParams(qs : string) : any {
+	let params = {};
 	let varPairs = qs.split('&');
 	if (varPairs.length == 0)
 		return params;
     for (let i = 0; i < varPairs.length; i++) {
         let pair = varPairs[i].split('=');
-		if (pair.length != 2)
-			continue;
-		params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+		if (pair.length == 1 && pair[0].length != 0)
+			params[decodeURIComponent(pair[0])] = null;
+		if (pair.length == 2)
+			params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
     }
 	return params;
 }
@@ -135,22 +139,21 @@ function processLocation() : void {
 	
 	let uri : string;
 	let handler : (response) => void;
-	const q = queryStringParams['q'];
-	const post = queryStringParams['post'];
-	if (q != undefined) {
-		uri = `https://api.github.com/search/issues?q=repo:${user}/${repo} label:post label:published ${q}`;
+	if (queryStringParams.q) {
+		uri = `https://api.github.com/search/issues?q=repo:${user}/${repo} label:post label:published ${queryStringParams.q}`;
 		handler = r => handleIssuesData(r.data.items);
 	}
-	else if (post != undefined) {
-		uri = `https://api.github.com/repos/${user}/${repo}/issues/${post}`;
+	else if (queryStringParams.post) {
+		uri = `https://api.github.com/repos/${user}/${repo}/issues/${queryStringParams.post}`;
 		handler = r => {
-			jsonpRequest(r.data.comments_url, cr => handleCommentsData(cr.data));
+			if (r.data.comments_url != undefined)
+				jsonpRequest(r.data.comments_url, cr => handleCommentsData(cr.data));
 			handleIssuesData([r.data]);
 		};
 	}
 	else {
 		uri = `https://api.github.com/repos/${user}/${repo}/issues?labels=post,published`;
-		handler = r => handleIssuesData(r.data);
+		handler = r => handleIssuesData(r.data, !queryStringParams.archive);
 	}
 	jsonpRequest(uri, handler);
 }
