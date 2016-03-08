@@ -1,17 +1,25 @@
 function getDottedDate(date, fullYear, separator) {
+    if (date === void 0) { date = new Date(); }
     if (fullYear === void 0) { fullYear = false; }
-    if (separator === void 0) { separator = "."; }
+    if (separator === void 0) { separator = '.'; }
     return (date.getFullYear() - (fullYear ? 0 : 2000)) + separator + (date.getMonth() + 1) + separator + date.getDate();
 }
-var addZero = function (i) { return (i < 10 ? "0" : "") + i; };
-function getColonTime(date, withSeconds) {
-    if (withSeconds === void 0) { withSeconds = true; }
-    return addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + (withSeconds ? (":" + addZero(date.getSeconds())) : "");
+function addZero(i) {
+    return (i < 10 ? '0' : '') + i;
 }
-var daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-var getDayOfWeek = function (date) { return daysOfWeek[date.getDate()]; };
+;
+function getColonTime(date, withSeconds) {
+    if (date === void 0) { date = new Date(); }
+    if (withSeconds === void 0) { withSeconds = true; }
+    return addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + (withSeconds ? (':' + addZero(date.getSeconds())) : '');
+}
+var daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+function getDayOfWeek(date) {
+    if (date === void 0) { date = new Date(); }
+    return daysOfWeek[date.getDate()];
+}
 function setClock() {
-    document.getElementById('time').innerHTML = getColonTime(new Date());
+    document.getElementById('time').innerHTML = getColonTime();
     setTimeout(setClock, 1000);
 }
 function copyEmailToClipboard(text) {
@@ -27,7 +35,7 @@ function copyEmailToClipboard(text) {
 function initEmailLink() {
     var emailAnchor = document.querySelector('a.email');
     var buttonAnchor = document.querySelector('button.email');
-    if (document.queryCommandSupported("copy") === true) {
+    if (document.queryCommandSupported('copy') === true) {
         emailAnchor.parentElement.removeChild(emailAnchor);
         buttonAnchor.style.display = 'inline-block';
         buttonAnchor.addEventListener('click', function (event) {
@@ -45,35 +53,114 @@ function gimmeThatRainbowFam() {
     }
     titleHeaderTextElement.innerHTML = technicolorHtml;
 }
-function renderIssues(response) {
-    var converter = new showdown.Converter();
-    for (var i in response.data) {
-        var issue = response.data[i];
-        issue.bodyHtml = converter.makeHtml(issue.body);
-        issue.commentCountText = issue.comments + " Comment" + (issue.comments == 1 ? "" : "s");
-        var date = new Date(issue.created_at);
-        issue.created = getDayOfWeek(date) + " " + getDottedDate(date, true, "-") + " " + getColonTime(date, false);
-    }
-    new Vue({
-        el: 'body',
-        data: {
-            posts: response.data
+var vm = new Vue({ el: 'body' });
+function handleIssuesData(responseData) {
+    if (responseData.length != 0 && responseData[0]['url'] != undefined) {
+        var converter = new showdown.Converter();
+        for (var i in responseData) {
+            var issue = responseData[i];
+            issue.bodyHtml = converter.makeHtml(issue.body);
+            var suffix = issue.comments == 1 ? '' : 's';
+            issue.commentCountText = issue.comments + " Comment" + suffix;
+            var date = new Date(issue.created_at);
+            var x = {
+                dow: getDayOfWeek(date),
+                date: getDottedDate(date, true, '-'),
+                time: getColonTime(date, false)
+            };
+            issue.created = x.dow + " " + x.date + " " + x.time;
         }
-    });
-    document.body.className += " loaded";
+        vm.$data = { posts: responseData };
+    }
+    else {
+        vm.$data = { message: 'No posts at this URI' };
+    }
+    document.body.setAttribute('data-loaded', 'true');
+}
+function handleCommentsData(commentsData) {
+    var converter = new showdown.Converter();
+    for (var i in commentsData) {
+        var comment = commentsData[i];
+        comment.bodyHtml = converter.makeHtml(comment.body);
+        var date = new Date(comment.created_at);
+        var x = {
+            dow: getDayOfWeek(date),
+            date: getDottedDate(date, true, '-'),
+            time: getColonTime(date, false)
+        };
+        comment.created = x.dow + " " + x.date + " " + x.time;
+    }
+    vm.$data = {
+        posts: vm.$data.posts,
+        comments: commentsData
+    };
+}
+function jsonpRequest(uri, callback, callbackParam) {
+    if (callbackParam === void 0) { callbackParam = 'callback'; }
+    var scriptElement = document.createElement('script');
+    var callbackName = callback['name'] + '_callback';
+    window[callbackName] = function (response) {
+        scriptElement.parentElement.removeChild(scriptElement);
+        callback(response);
+    };
+    scriptElement.src = uri + (uri.indexOf('?') == -1 ? '?' : '&') + 'callback=' + callbackName;
+    document.body.appendChild(scriptElement);
+}
+function getQueryStringParams(qs) {
+    var params = [];
+    var varPairs = qs.split('&');
+    if (varPairs.length == 0)
+        return params;
+    for (var i = 0; i < varPairs.length; i++) {
+        var pair = varPairs[i].split('=');
+        if (pair.length != 2)
+            continue;
+        params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+    }
+    return params;
+}
+function processLocation() {
+    var user = 'NickStrupat';
+    var repo = 'NickStrupat.github.io';
+    var queryStringParams = getQueryStringParams(location.search.substring(1));
+    var hashParams = getQueryStringParams(location.hash.substring(1));
+    for (var i in hashParams)
+        queryStringParams[i] = hashParams[i];
+    document.body.removeAttribute('data-loaded');
+    var uri;
+    var handler;
+    var q = queryStringParams['q'];
+    var post = queryStringParams['post'];
+    if (q != undefined) {
+        uri = "https://api.github.com/search/issues?q=repo:" + user + "/" + repo + " label:post label:published " + q;
+        handler = function (r) { return handleIssuesData(r.data.items); };
+    }
+    else if (post != undefined) {
+        uri = "https://api.github.com/repos/" + user + "/" + repo + "/issues/" + post;
+        handler = function (r) {
+            jsonpRequest(r.data.comments_url, function (cr) { return handleCommentsData(cr.data); });
+            handleIssuesData([r.data]);
+        };
+    }
+    else {
+        uri = "https://api.github.com/repos/" + user + "/" + repo + "/issues?labels=post,published";
+        handler = function (r) { return handleIssuesData(r.data); };
+    }
+    jsonpRequest(uri, handler);
 }
 function init() {
     document.getElementById('date').innerHTML = getDottedDate(new Date());
+    window.onhashchange = processLocation;
+    var searchBox = document.querySelector('input#search');
+    searchBox.onkeypress = function (e) {
+        if (e.keyCode == 13)
+            location.hash = searchBox.value.length == 0 ? '' : 'q=' + encodeURIComponent(searchBox.value);
+    };
     setClock();
     initEmailLink();
     document.getElementById('page-length').innerHTML = document.documentElement.innerHTML.length.toString();
     gimmeThatRainbowFam();
-    // get "comments" (issues)
-    var script = document.createElement("script");
-    var url = "https://api.github.com/repos/NickStrupat/NickStrupat.github.io/issues?labels=post,published&callback=" + renderIssues.name;
-    window[renderIssues.name] = renderIssues;
-    script.src = url;
-    document.body.appendChild(script);
+    processLocation();
 }
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener('DOMContentLoaded', init);
 //# sourceMappingURL=thescriptfile.js.map

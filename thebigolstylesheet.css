@@ -132,7 +132,7 @@ section {
   margin: 2em auto;
   max-width: 800px; }
 
-body.loaded > section {
+body[data-loaded=true] > section {
   display: block; }
 
 section:first-of-type {
@@ -162,14 +162,26 @@ article {
   article > header > .date-time {
     right: 1em;
     top: 0;
-    color: white;
-    background-color: blue; }
+    color: blue;
+    background-color: white; }
   article > footer > .comment-count {
     position: absolute;
     right: 1em;
     bottom: 0;
     padding: 0 0.5em;
     color: blue;
+    background-color: white; }
+
+article.comment {
+  background: darkgreen; }
+  article.comment > header > h1 {
+    color: darkgreen;
+    background-color: white; }
+  article.comment > header > .date-time {
+    color: darkgreen;
+    background-color: white; }
+  article.comment > footer > .comment-count {
+    color: darkgreen;
     background-color: white; }
 
 article.title {

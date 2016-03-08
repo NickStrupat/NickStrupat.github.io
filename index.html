@@ -57,8 +57,29 @@
                 </main>
 				
 				<footer>
-					<a class="comment-count" href="{{ post.comments_url }}">{{ post.commentCountText }}</a>
+					<a class="comment-count" href="#post={{ post.number }}">{{ post.commentCountText }}</a>
 				</footer>
+            </article>
+        </section>
+		
+		<section v-for="comment in comments">
+            <article class="comment">
+				<header>
+					<h1>{{ comment.user.login }}</h1>
+					<span class="date-time">{{ comment.created }}</span>
+				</header>
+				
+                <main>
+                    {{{ comment.bodyHtml }}}
+                </main>
+            </article>
+		</section>
+        
+		<section v-if="message">
+            <article>
+                <main>
+                    {{ message }}
+                </main>
             </article>
         </section>
         

@@ -1,36 +1,40 @@
-function getDottedDate(date : Date, fullYear : boolean = false, separator : string = ".") : string {
+function getDottedDate(date = new Date(), fullYear = false, separator = '.') {
 	return (date.getFullYear() - (fullYear ? 0 : 2000)) + separator + (date.getMonth() + 1) + separator + date.getDate();
 }
 
-const addZero = (i : number) : string => (i < 10 ? "0" : "") + i;
+function addZero(i : number) {
+	return (i < 10 ? '0' : '') + i
+};
 
-function getColonTime(date : Date, withSeconds : boolean = true) : string {
-	return addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + (withSeconds ? (":" + addZero(date.getSeconds())) : "");
+function getColonTime(date = new Date(), withSeconds = true) : string {
+	return addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + (withSeconds ? (':' + addZero(date.getSeconds())) : '');
 }
 
-const daysOfWeek : string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const getDayOfWeek = (date : Date) : string => daysOfWeek[date.getDate()];
+const daysOfWeek : string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+function getDayOfWeek(date = new Date()) {
+	return daysOfWeek[date.getDate()];
+}
 
 function setClock() {
-    document.getElementById('time').innerHTML = getColonTime(new Date());
+    document.getElementById('time').innerHTML = getColonTime();
     setTimeout(setClock, 1000);
 }
 
 function copyEmailToClipboard(text : string) {
-    var textArea = document.createElement('textarea');
+    let textArea = document.createElement('textarea');
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.select();
-    var success = document.execCommand('copy');
+    let success = document.execCommand('copy');
     document.body.removeChild(textArea);
     if (success !== true)
         alert('Could not copy email to clipboard. Try selecting the text and copying like the old days.')
 }
 
 function initEmailLink() {
-	var emailAnchor = <HTMLElement> document.querySelector('a.email');
-    var buttonAnchor = <HTMLElement> document.querySelector('button.email');
-    if (document.queryCommandSupported("copy") === true) {
+	let emailAnchor = <HTMLElement> document.querySelector('a.email');
+    let buttonAnchor = <HTMLElement> document.querySelector('button.email');
+    if (document.queryCommandSupported('copy') === true) {
         emailAnchor.parentElement.removeChild(emailAnchor);
         buttonAnchor.style.display = 'inline-block';
         buttonAnchor.addEventListener('click', function(event) {
@@ -40,47 +44,133 @@ function initEmailLink() {
 }
 
 function gimmeThatRainbowFam() {
-    var titleHeaderTextElement = <HTMLElement> document.querySelector('.title h1');
-    var text = titleHeaderTextElement.innerHTML;
-    var technicolorHtml = '';
+    let titleHeaderTextElement = <HTMLElement> document.querySelector('.title h1');
+    const text = titleHeaderTextElement.innerHTML;
+    let technicolorHtml = '';
     const colors = ['tomato','orange','yellow','turquoise','springgreen','aqua','violet','magenta'];
-    for (var i = 0; i != text.length; ++i) {
+    for (let i = 0; i != text.length; ++i) {
         technicolorHtml += `<span style="color: ${colors[i % colors.length]};">${text[i]}</span>`;
     }
     titleHeaderTextElement.innerHTML = technicolorHtml;
 }
 
-function renderIssues(response) {
-		var converter = new showdown.Converter();
-		for (var i in response.data) {
-			var issue = response.data[i];
+let vm = new Vue({el: 'body'});
+function handleIssuesData(responseData : any[]) {
+	if (responseData.length != 0 && responseData[0]['url'] != undefined) {
+		let converter = new showdown.Converter();
+		for (let i in responseData) {
+			let issue = responseData[i];
 			issue.bodyHtml = converter.makeHtml(issue.body);
-			issue.commentCountText = issue.comments + " Comment" + (issue.comments == 1 ? "" : "s");
-			var date = new Date(issue.created_at);
-			issue.created = getDayOfWeek(date) + " " + getDottedDate(date, true, "-") + " " + getColonTime(date, false);
+			const suffix = issue.comments == 1 ? '' : 's';
+			issue.commentCountText = `${issue.comments} Comment${suffix}`;
+			const date = new Date(issue.created_at);
+			const x = {
+				dow: getDayOfWeek(date),
+				date: getDottedDate(date, true, '-'),
+				time: getColonTime(date, false)
+			};
+			issue.created = `${x.dow} ${x.date} ${x.time}`;
 		}
-        new Vue({
-            el: 'body',
-            data: {
-                posts: response.data
-            }
-        });
-        document.body.className += " loaded";
+		vm.$data = { posts: responseData }; 
+	}
+	else {
+		vm.$data =  { message: 'No posts at this URI' };
+	}
+	document.body.setAttribute('data-loaded', 'true');
+}
+
+function handleCommentsData(commentsData : any[]) {
+	let converter = new showdown.Converter();
+	for (let i in commentsData) {
+		var comment = commentsData[i];
+		comment.bodyHtml = converter.makeHtml(comment.body);
+		const date = new Date(comment.created_at);
+		const x = {
+			dow: getDayOfWeek(date),
+			date: getDottedDate(date, true, '-'),
+			time: getColonTime(date, false)
+		};
+		comment.created = `${x.dow} ${x.date} ${x.time}`;
+	}
+	vm.$data = {
+		posts: vm.$data.posts,
+		comments: commentsData
+	};
+}
+
+function jsonpRequest(uri : string, callback : (response) => void, callbackParam = 'callback') {
+	let scriptElement = document.createElement('script');
+	let callbackName = callback['name'] + '_callback'; 
+    window[callbackName] = response => {
+		scriptElement.parentElement.removeChild(scriptElement);
+		callback(response);
+	}
+	scriptElement.src = uri + (uri.indexOf('?') == -1 ? '?' : '&') + 'callback=' + callbackName;
+    document.body.appendChild(scriptElement);
+}
+
+function getQueryStringParams(qs : string) : string[] {
+	let params : string[] = [];
+	let varPairs = qs.split('&');
+	if (varPairs.length == 0)
+		return params;
+    for (let i = 0; i < varPairs.length; i++) {
+        let pair = varPairs[i].split('=');
+		if (pair.length != 2)
+			continue;
+		params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
     }
+	return params;
+}
+
+function processLocation() : void {
+	const user = 'NickStrupat';
+	const repo = 'NickStrupat.github.io';
+	let queryStringParams = getQueryStringParams(location.search.substring(1));
+	let hashParams = getQueryStringParams(location.hash.substring(1));
+	for (var i in hashParams)
+		queryStringParams[i] = hashParams[i];
+
+	document.body.removeAttribute('data-loaded');
+	
+	let uri : string;
+	let handler : (response) => void;
+	const q = queryStringParams['q'];
+	const post = queryStringParams['post'];
+	if (q != undefined) {
+		uri = `https://api.github.com/search/issues?q=repo:${user}/${repo} label:post label:published ${q}`;
+		handler = r => handleIssuesData(r.data.items);
+	}
+	else if (post != undefined) {
+		uri = `https://api.github.com/repos/${user}/${repo}/issues/${post}`;
+		handler = r => {
+			jsonpRequest(r.data.comments_url, cr => handleCommentsData(cr.data));
+			handleIssuesData([r.data]);
+		};
+	}
+	else {
+		uri = `https://api.github.com/repos/${user}/${repo}/issues?labels=post,published`;
+		handler = r => handleIssuesData(r.data);
+	}
+	jsonpRequest(uri, handler);
+}
 
 function init() {
     document.getElementById('date').innerHTML = getDottedDate(new Date());
+	
+	window.onhashchange = processLocation;
+	let searchBox = <HTMLInputElement> document.querySelector('input#search');
+	searchBox.onkeypress = e => {
+		if (e.keyCode == 13)
+			location.hash = searchBox.value.length == 0 ? '' : 'q=' + encodeURIComponent(searchBox.value);
+	}
+	
     setClock();
     initEmailLink();
     document.getElementById('page-length').innerHTML = document.documentElement.innerHTML.length.toString();
     gimmeThatRainbowFam();
-    	
-    // get "comments" (issues)
-    var script = document.createElement("script");
-    var url = "https://api.github.com/repos/NickStrupat/NickStrupat.github.io/issues?labels=post,published&callback=" + renderIssues.name;
-    window[renderIssues.name] = renderIssues;
-    script.src = url;
-    document.body.appendChild(script);
+
+	processLocation();
 }
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener('DOMContentLoaded', init);

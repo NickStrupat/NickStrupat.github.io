@@ -137,7 +137,7 @@ section {
     margin: 2em auto;
     max-width: 800px;
 }
-body.loaded > section {
+body[data-loaded=true] > section {
     display: block;
 }
 section:first-of-type {
@@ -149,8 +149,11 @@ article {
     margin: 0 1em 0 0.5em;
     padding: 0.5em 2px;
     
-    color: white;
-    background: blue;
+	$foreground-color: white;
+	$background-color: blue;
+	
+    color: $foreground-color;
+    background: $background-color;
     box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5);
 	
 	p {
@@ -170,15 +173,15 @@ article {
 			top: 0;
 			padding: 2px 0.5em 0 0.5em;
 			background: inherit;
-			color: blue;
-			background-color: white;
+			color: $background-color;
+			background-color: $foreground-color;
 		}
 		
 		&> .date-time {
 			right: 1em;
 			top: 0;
-			color: white;
-			background-color: blue;
+			color: $background-color;
+			background-color: $foreground-color;
 		}
 	}
 	
@@ -188,8 +191,31 @@ article {
 			right: 1em;
 			bottom: 0;
 			padding: 0 0.5em;
-			color: blue;
-			background-color: white;
+			color: $background-color;
+			background-color: $foreground-color;
+		}
+	}
+}
+article.comment {
+	$foreground-color: white;
+	$background-color: darkgreen;
+    background: $background-color;
+	
+	&> header {
+		&> h1 {
+			color: $background-color;
+			background-color: $foreground-color;
+		}
+		
+		&> .date-time {
+			color: $background-color;
+			background-color: $foreground-color;
+		}
+	}
+	&> footer {
+		&> .comment-count {
+			color: $background-color;
+			background-color: $foreground-color;
 		}
 	}
 }
