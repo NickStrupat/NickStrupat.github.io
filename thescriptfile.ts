@@ -10,9 +10,9 @@ function getColonTime(date = new Date(), withSeconds = true) : string {
 	return addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + (withSeconds ? (':' + addZero(date.getSeconds())) : '');
 }
 
-const daysOfWeek : string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const daysOfWeek : string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 function getDayOfWeek(date = new Date()) {
-	return daysOfWeek[date.getDate()];
+	return daysOfWeek[date.getDay()];
 }
 
 function setClock() {

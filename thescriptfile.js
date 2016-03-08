@@ -13,10 +13,10 @@ function getColonTime(date, withSeconds) {
     if (withSeconds === void 0) { withSeconds = true; }
     return addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + (withSeconds ? (':' + addZero(date.getSeconds())) : '');
 }
-var daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 function getDayOfWeek(date) {
     if (date === void 0) { date = new Date(); }
-    return daysOfWeek[date.getDate()];
+    return daysOfWeek[date.getDay()];
 }
 function setClock() {
     document.getElementById('time').innerHTML = getColonTime();
