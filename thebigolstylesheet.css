@@ -171,6 +171,29 @@ article {
     top: 0;
     color: blue;
     background-color: white; }
+  article > main h1:before {
+    content: "-[ "; }
+  article > main h1:after {
+    content: " ]-"; }
+  article > main h2:before {
+    content: "--[ "; }
+  article > main h2:after {
+    content: " ]--"; }
+  article > main h3:before {
+    content: "---[ "; }
+  article > main h3:after {
+    content: " ]---"; }
+  article > main strong {
+    font-weight: bold; }
+  article > main em {
+    font-style: italic; }
+  article > main ul > li:before {
+    content: "\BB\A0"; }
+  article > main ol {
+    counter-reset: li; }
+    article > main ol > li:before {
+      content: counter(li) ") ";
+      counter-increment: li; }
   article > footer > .comment-count {
     position: absolute;
     right: 1em;
@@ -190,6 +213,14 @@ article.comment {
   article.comment > footer > .comment-count {
     color: darkgreen;
     background-color: white; }
+
+a.button {
+  margin: 0 1em 0 0.5em;
+  padding: 2px 1.5em;
+  text-decoration: underline;
+  color: white;
+  background: darkviolet;
+  box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5); }
 
 article.title {
   color: yellow;

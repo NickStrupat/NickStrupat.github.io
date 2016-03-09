@@ -197,6 +197,22 @@ article {
 		}
 	}
 	
+	&> main {
+		h1:before { content: "-[ "; } h1:after { content: " ]-"; }
+		h2:before { content: "--[ "; } h2:after { content: " ]--"; }
+		h3:before { content: "---[ "; } h3:after { content: " ]---"; }
+		strong { font-weight: bold; }
+		em { font-style: italic; }
+		ul > li:before { content: "\BB\A0";	}
+		ol {
+			counter-reset: li;
+			&> li:before {
+				content: counter(li) ") ";
+				counter-increment: li;
+			}
+		}	
+	}
+	
 	&> footer {
 		&> .comment-count {
 			position: absolute;
@@ -230,6 +246,14 @@ article.comment {
 			background-color: $foreground-color;
 		}
 	}
+}
+a.button {
+    margin: 0 1em 0 0.5em;
+    padding: 2px 1.5em;
+	text-decoration: underline;
+	color: white;
+    background: darkviolet;
+    box-shadow: 0.5em 1em rgba(0, 0, 0, 0.5);
 }
 article.title {
     color: yellow;

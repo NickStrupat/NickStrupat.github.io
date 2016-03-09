@@ -75,6 +75,10 @@
             </article>
 		</section>
         
+		<section v-if="comments">
+			<a class="button" href="{{ posts[0].html_url }}#new_comment_field">New comment</a>
+        </section>
+        
 		<section v-if="message">
             <article>
                 <main>
