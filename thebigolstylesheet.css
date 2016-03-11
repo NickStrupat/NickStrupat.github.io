@@ -171,29 +171,29 @@ article {
     top: 0;
     color: blue;
     background-color: white; }
-  article > main h1:before {
-    content: "-[ "; }
-  article > main h1:after {
-    content: " ]-"; }
-  article > main h2:before {
-    content: "--[ "; }
-  article > main h2:after {
-    content: " ]--"; }
-  article > main h3:before {
-    content: "---[ "; }
-  article > main h3:after {
-    content: " ]---"; }
-  article > main strong {
+  article > main:not(.title) h1 {
+    font-size: 250%; }
+  article > main:not(.title) h2 {
+    font-size: 200%; }
+  article > main:not(.title) h3 {
+    font-size: 150%; }
+  article > main:not(.title) strong {
     font-weight: bold; }
-  article > main em {
+  article > main:not(.title) em {
     font-style: italic; }
-  article > main ul > li:before {
+  article > main:not(.title) ul > li:before {
     content: "\BB\A0"; }
-  article > main ol {
+  article > main:not(.title) a {
+    text-decoration: underline; }
+  article > main:not(.title) ol {
     counter-reset: li; }
-    article > main ol > li:before {
+    article > main:not(.title) ol > li:before {
       content: counter(li) ") ";
       counter-increment: li; }
+  article > main:not(.title) blockquote {
+    margin: 0.5em 0;
+    padding: 0.1px 0.5em;
+    background: rgba(255, 255, 255, 0.25); }
   article > footer > .comment-count {
     position: absolute;
     right: 1em;

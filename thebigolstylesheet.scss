@@ -197,20 +197,26 @@ article {
 		}
 	}
 	
-	&> main {
-		h1:before { content: "-[ "; } h1:after { content: " ]-"; }
-		h2:before { content: "--[ "; } h2:after { content: " ]--"; }
-		h3:before { content: "---[ "; } h3:after { content: " ]---"; }
+	&> main:not(.title) {
+		h1 { font-size: 250%; }
+		h2 { font-size: 200%; }
+		h3 { font-size: 150%; }
 		strong { font-weight: bold; }
 		em { font-style: italic; }
 		ul > li:before { content: "\BB\A0";	}
+		a { text-decoration: underline; }
 		ol {
 			counter-reset: li;
 			&> li:before {
 				content: counter(li) ") ";
 				counter-increment: li;
 			}
-		}	
+		}
+		blockquote {
+			margin: 0.5em 0;
+			padding: 0.1px 0.5em;
+			background: rgba(255, 255, 255, 0.25);
+		}
 	}
 	
 	&> footer {

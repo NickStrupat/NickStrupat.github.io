@@ -54,13 +54,28 @@ function gimmeThatRainbowFam() {
     titleHeaderTextElement.innerHTML = technicolorHtml;
 }
 
-let vm = new Vue({el: 'body'});
+function highlightCode(html : string) {
+	let node = document.createElement('div');
+	node.innerHTML = html;
+	var codeEls = node.getElementsByTagName('code')
+	for (let j = 0; j != codeEls.length; ++j) {
+		var code = codeEls[j];
+		hljs.highlightBlock(code);
+	}
+	return node.innerHTML;
+}
+
+let vm = new Vue({
+	el: 'body'
+});
 function handleIssuesData(responseData : any[], details = true) {
 	if (responseData.length != 0 && responseData[0]['url'] != undefined) {
 		let converter = new showdown.Converter();
 		for (let i in responseData) {
 			let issue = responseData[i];
-			issue.bodyHtml = converter.makeHtml(issue.body);
+			let bodyHtml = converter.makeHtml(issue.body);
+			bodyHtml = highlightCode(bodyHtml);		
+			issue.bodyHtml = bodyHtml;
 			const suffix = issue.comments == 1 ? '' : 's';
 			issue.commentCountText = `${issue.comments} Comment${suffix}`;
 			const date = new Date(issue.created_at);
@@ -76,6 +91,7 @@ function handleIssuesData(responseData : any[], details = true) {
 	else {
 		vm.$data =  { message: 'No posts at this URI' };
 	}
+	//vm.$nextTick(() => hljs.initHighlighting());
 	document.body.setAttribute('data-loaded', 'true');
 }
 
@@ -86,6 +102,7 @@ function handleCommentsData(commentsData : any[]) {
 		var comment = commentsData[i];
 		let bodyHtml = converter.makeHtml(comment.body);
 		bodyHtml = bodyHtml.replace(pattern, x => `<a class="mention" href="https://github.com/${x.substring(1)}">${x}</a>`);
+		bodyHtml = highlightCode(bodyHtml);		
 		comment.bodyHtml = bodyHtml;
 		const date = new Date(comment.created_at);
 		const x = {
@@ -99,6 +116,7 @@ function handleCommentsData(commentsData : any[]) {
 		posts: vm.$data.posts,
 		comments: commentsData
 	};
+	//vm.$nextTick(() => hljs.initHighlighting());
 }
 
 function jsonpRequest(uri : string, callback : (response) => void, callbackParam = 'callback') {
@@ -156,9 +174,10 @@ function processLocation() : void {
 		handler = r => handleIssuesData(r.data, !queryStringParams.archive);
 	}
 	jsonpRequest(uri, handler);
+	//Vue.nextTick(() => alert('nextTick'));//hljs.initHighlighting());
 }
 
-function init() {
+function init() {	
     document.getElementById('date').innerHTML = getDottedDate(new Date());
 	
 	window.onhashchange = processLocation;

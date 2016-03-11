@@ -53,14 +53,28 @@ function gimmeThatRainbowFam() {
     }
     titleHeaderTextElement.innerHTML = technicolorHtml;
 }
-var vm = new Vue({ el: 'body' });
+function highlightCode(html) {
+    var node = document.createElement('div');
+    node.innerHTML = html;
+    var codeEls = node.getElementsByTagName('code');
+    for (var j = 0; j != codeEls.length; ++j) {
+        var code = codeEls[j];
+        hljs.highlightBlock(code);
+    }
+    return node.innerHTML;
+}
+var vm = new Vue({
+    el: 'body'
+});
 function handleIssuesData(responseData, details) {
     if (details === void 0) { details = true; }
     if (responseData.length != 0 && responseData[0]['url'] != undefined) {
         var converter = new showdown.Converter();
         for (var i in responseData) {
             var issue = responseData[i];
-            issue.bodyHtml = converter.makeHtml(issue.body);
+            var bodyHtml = converter.makeHtml(issue.body);
+            bodyHtml = highlightCode(bodyHtml);
+            issue.bodyHtml = bodyHtml;
             var suffix = issue.comments == 1 ? '' : 's';
             issue.commentCountText = issue.comments + " Comment" + suffix;
             var date = new Date(issue.created_at);
@@ -76,6 +90,7 @@ function handleIssuesData(responseData, details) {
     else {
         vm.$data = { message: 'No posts at this URI' };
     }
+    //vm.$nextTick(() => hljs.initHighlighting());
     document.body.setAttribute('data-loaded', 'true');
 }
 var pattern = /\B@[a-z0-9_-]+/mgi;
@@ -85,6 +100,7 @@ function handleCommentsData(commentsData) {
         var comment = commentsData[i];
         var bodyHtml = converter.makeHtml(comment.body);
         bodyHtml = bodyHtml.replace(pattern, function (x) { return ("<a class=\"mention\" href=\"https://github.com/" + x.substring(1) + "\">" + x + "</a>"); });
+        bodyHtml = highlightCode(bodyHtml);
         comment.bodyHtml = bodyHtml;
         var date = new Date(comment.created_at);
         var x = {
@@ -98,6 +114,7 @@ function handleCommentsData(commentsData) {
         posts: vm.$data.posts,
         comments: commentsData
     };
+    //vm.$nextTick(() => hljs.initHighlighting());
 }
 function jsonpRequest(uri, callback, callbackParam) {
     if (callbackParam === void 0) { callbackParam = 'callback'; }
@@ -151,6 +168,7 @@ function processLocation() {
         handler = function (r) { return handleIssuesData(r.data, !queryStringParams.archive); };
     }
     jsonpRequest(uri, handler);
+    //Vue.nextTick(() => alert('nextTick'));//hljs.initHighlighting());
 }
 function init() {
     document.getElementById('date').innerHTML = getDottedDate(new Date());
