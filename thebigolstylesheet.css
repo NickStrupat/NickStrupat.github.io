@@ -3,6 +3,7 @@ html {
     background: url(data:image/gif;base64,R0lGODlhAwADAIAAAKWlpQAAACwAAAAAAwADAAACBEwAdlEAOw==);*/
   background: #333;
   background: url("data:image/gif;base64,R0lGODlhCQACAIAAAKioqAAAACwAAAAACQACAAACBoxhgZobBQA7");
+  background-attachment: fixed;
   font-family: 'IBMVGA8';
   font-size: 16px;
   /*text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);*/
